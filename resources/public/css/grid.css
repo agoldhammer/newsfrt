@@ -1,0 +1,159 @@
+.main-head {
+  grid-area: header;
+}
+.content {
+  grid-area: content;
+}
+.main-nav {
+  grid-area: nav;
+}
+.side {
+  grid-area: sidebar;
+}
+.ad {
+  grid-area: ad;
+}
+.main-footer {
+  grid-area: footer;
+}
+
+.cat-btn:hover, .topic-btn:hover {
+    background-color: yellow;
+}
+
+.wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-areas:
+    "header"
+    "nav"
+    "content"
+    "sidebar"
+    "ad"
+    "footer";
+}
+
+.article {
+    display: grid;
+    grid-gap: 0px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+	"art-header"
+	"art-content";
+}
+
+@media (min-width: 500px) {
+  .wrapper {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas:
+      "header  header"
+      "nav     nav"
+      "sidebar content"
+      "ad      footer";
+  }
+  nav ul {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 700px) {
+  .wrapper {
+    grid-template-columns: 1fr 8fr 2fr;
+    grid-template-areas:
+      "header header  header"
+      "nav    content sidebar"
+      "nav    content ad"
+      "footer footer  footer"
+   }
+   nav ul {
+     flex-direction: column;
+   }
+}
+
+body {
+    # background-color: rgba(255, 255, 255, 0.5);
+    # background-image: url("nytimes.gif");
+    # background-blend-mode: lighten;
+    background-color: lightgray;
+}
+
+.header {
+    background-color: lightyellow;
+}
+
+@media (min-width: 700px) {
+    .content {
+	display: grid;
+	grid-gap: 5px;
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas:
+	"article article"
+    }
+}
+
+.content {
+    margin: 0px;
+    padding: 0px;
+    font-family: Verdana;
+    background-color: lightgray;
+}
+
+.ad {
+    background-color: papayawhip;
+}
+
+.side {
+    background-color: burlywood;
+}
+
+.main-head {
+    height: 100px;
+    padding: 20px;
+    color: white;
+    background-color: teal;
+}
+
+.main-nav {
+    background-color: lightcyan;
+}
+
+.main-footer {
+    background-color: powderblue;
+}
+
+.left-nav {
+    list-style-type: none;
+}
+
+.article {
+    width: 350px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.art-header {
+    /* border-left: 2px solid lightblue; */
+    background-color: lightblue;
+    font-size: 80%;
+    text-align: left;
+    vertical-align: bottom;
+    color: red;
+    margin: 0px;
+    border-radius: 10px;
+    /* border-bottom: none; */
+    padding: 3px;
+}
+
+.art-content {
+    /* border: 2px solid lightblue; */
+    background-color: white;
+    /* border-top: none; */
+    border-radius: 10px;
+    padding: 3px;
+    margin: 0px;
+    font-size: 110%;
+}

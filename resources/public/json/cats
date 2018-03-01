@@ -1,0 +1,188 @@
+{
+  "cats": {
+    "Culture": [
+      {
+        "cat": "Culture", 
+        "desc": "Books", 
+        "query": "book review novel fiction nonfiction author publish", 
+        "topic": "Books"
+      }, 
+      {
+        "cat": "Culture", 
+        "desc": "Film", 
+        "query": "film movie Hollywood oscar start", 
+        "topic": "Film"
+      }, 
+      {
+        "cat": "Culture", 
+        "desc": "Music", 
+        "query": "concert symphony conductor jazz rap music rock band", 
+        "topic": "Music"
+      }, 
+      {
+        "cat": "Culture", 
+        "desc": "Theater", 
+        "query": "play theater show Broadway stage", 
+        "topic": "Theater"
+      }
+    ], 
+    "Economy": [
+      {
+        "cat": "Economy", 
+        "desc": "Business", 
+        "query": "business firm enterprise industry Silicon computer automobiles", 
+        "topic": "Business"
+      }, 
+      {
+        "cat": "Economy", 
+        "desc": "Companies", 
+        "query": "Apple Microsoft Amazon General Ford WalMart Tesla", 
+        "topic": "Companies"
+      }, 
+      {
+        "cat": "Economy", 
+        "desc": "Finance", 
+        "query": "bank deposit invest acquisition merger leverage loan finance", 
+        "topic": "Finance"
+      }, 
+      {
+        "cat": "Economy", 
+        "desc": "Fiscal", 
+        "query": "tax Treasury revenue excise fiscal budget", 
+        "topic": "Tax"
+      }, 
+      {
+        "cat": "Economy", 
+        "desc": "Labor", 
+        "query": "labor union work hours wage productivity strike layoff", 
+        "topic": "Labor"
+      }
+    ], 
+    "Government": [
+      {
+        "cat": "Government", 
+        "desc": "Executive", 
+        "query": "president cabinet secretary administration agency federal", 
+        "topic": "Executive"
+      }, 
+      {
+        "cat": "Government", 
+        "desc": "Judicial", 
+        "query": "supreme justice judge verdict jury constitution", 
+        "topic": "Judicial"
+      }, 
+      {
+        "cat": "Government", 
+        "desc": "Legislative", 
+        "query": "law bill lawmaker congress senate chairman committee", 
+        "topic": "Legislative"
+      }
+    ], 
+    "Issues": [
+      {
+        "cat": "Issues", 
+        "desc": "Communications", 
+        "query": "FCC neutrality telecom television radio", 
+        "topic": "Communications"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Education", 
+        "query": "education school college university professor graduate campus", 
+        "topic": "Educ"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Elections", 
+        "query": "vote gerrymandering ballot recount district campaign registration", 
+        "topic": "Elec"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Environment", 
+        "query": "ecology climate environment green emission pollution", 
+        "topic": "Environment"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Gender", 
+        "query": "gender feminism trans sexuality gay homosexual abortion", 
+        "topic": "Gender"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Polls", 
+        "query": "poll survey statistics", 
+        "topic": "Polls"
+      }, 
+      {
+        "cat": "Issues", 
+        "desc": "Regulation", 
+        "query": "regulation rules FAA CAB NLRB ICC FTC FDA EPA", 
+        "topic": "Reg"
+      }
+    ], 
+    "SciTech": [
+      {
+        "cat": "SciTech", 
+        "desc": "Science", 
+        "query": "science research physics chemistry medicine biology genetics astronomy", 
+        "topic": "Science"
+      }, 
+      {
+        "cat": "SciTech", 
+        "desc": "Tech", 
+        "query": "tech technology biotech silicon artificial intelligence machine software", 
+        "topic": "Tech"
+      }
+    ], 
+    "Security": [
+      {
+        "cat": "Security", 
+        "desc": "Crime", 
+        "query": "police crime murder robbery rape fraud", 
+        "topic": "Crime"
+      }, 
+      {
+        "cat": "Security", 
+        "desc": "Defense", 
+        "query": "military army navy air war bomb invasion", 
+        "topic": "Defense"
+      }, 
+      {
+        "cat": "Security", 
+        "desc": "NetSecurity", 
+        "query": "cybersecurity hack", 
+        "topic": "NetSec"
+      }, 
+      {
+        "cat": "Security", 
+        "desc": "Terrorism", 
+        "query": "terror attack massacre", 
+        "topic": "Terrorism"
+      }
+    ], 
+    "Sports": [
+      {
+        "cat": "Sports", 
+        "desc": "Baseball", 
+        "query": "baseball League series", 
+        "topic": "Baseball"
+      }, 
+      {
+        "cat": "Sports", 
+        "desc": "Basketball", 
+        "query": "basketball NBA", 
+        "topic": "Basketball"
+      }, 
+      {
+        "cat": "Sports", 
+        "desc": "Football", 
+        "query": "football NFL bowls", 
+        "topic": "Football"
+      }
+    ]
+  }, 
+  "count": 168063
+}
+
