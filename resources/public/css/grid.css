@@ -17,6 +17,20 @@
   grid-area: footer;
 }
 
+.cat-btn {
+    border-radius: 5px;
+    margin-left: 1px;
+    margin-top: 2px;
+    width: 90%;
+    color: fuchsia;
+}
+
+.topic-btn {
+    width: 70%;
+    margin: 2px;
+    font-size: 80%;
+}
+
 .cat-btn:hover, .topic-btn:hover {
     background-color: yellow;
 }

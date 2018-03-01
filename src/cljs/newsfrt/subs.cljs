@@ -15,3 +15,13 @@
  :cats-loading?
  (fn [db]
    (:cats-loading? db)))
+
+(rf/reg-sub
+ :categories
+ (fn [db]
+   (keys (get-in db [:navdata :cats]))))
+
+(rf/reg-sub
+ :topics-by-category
+ (fn [db [_ category]]
+   (mapv #(:topic %1) (get-in db [:navdata :cats category]))))
