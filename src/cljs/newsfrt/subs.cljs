@@ -22,6 +22,22 @@
    (keys (get-in db [:navdata :cats]))))
 
 (rf/reg-sub
+ :category
+ (fn [db [_ category]]
+   (get-in db [:navdata :cats category])))
+
+(rf/reg-sub
  :topics-by-category
  (fn [db [_ category]]
    (mapv #(:topic %1) (get-in db [:navdata :cats category]))))
+
+(rf/reg-sub
+ :fulltopic
+ (fn [db [_ category topic]]
+   (let [topics (get-in db [:navdata :cats category])]
+     (first (filter #(= topic (:topic %1)) topics)))))
+
+(rf/reg-sub
+ :topic-to-query
+ (fn [db [_ category topic]]
+   (:query @(rf/subscribe [:fulltopic category topic]))))
