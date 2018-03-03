@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [re-com.core :as re-com]
             [newsfrt.subs :as subs]
+            [clojure.string :as string]
             ))
 
 (defn title []
@@ -15,12 +16,19 @@
         loading? @(rf/subscribe [:cats-loading?])]
     (if loading?
       [re-com/throbber
-       :size :small
-       :color "red"]
+       :color "yellow"
+         :size :regular]
+      #_[:p "pending"]
       [re-com/title
-       :style {:color :white}
+       :style {:color :white :margin "10px"}
        :label (str icount)
        :level :level4])))
+
+(defn make-article
+  [{:keys [source date author text]}]
+  [:article.article
+   [:p.art-header (string/join " " [author date source])]
+   [:p.art-content text]])
 
 (defn topic-button
   [topic]
@@ -37,13 +45,13 @@
     (mapv category-button categories)))
 
 (defn main-panel []
-  #_[re-com/v-box
-   :height "100%"
-     :children [[title] [itemcount]]]
-  [:div.wrapper [:header.main-head "The Latest News  "
-                 [:i.fab.fa-500px](itemcount)]
+  [:div.wrapper [:header.main-head "The Latest News    "
+                 [:i.fab.fa-500px {:style {:margin "5px"}}]
+                 (itemcount)]
    (into [:nav.main-nav] (category-buttons))
-   [:content.content "content"]
+   #_[:content.content "content"]
+   (into [:content.content] (mapv make-article @(rf/subscribe
+                                                 [:get-fake-status-list 23])))
    [:aside.side "sidetext"]
    [:div.ad "ad-text"]
    [:footer.main-footer "footer text"]])

@@ -41,3 +41,12 @@
  :topic-to-query
  (fn [db [_ category topic]]
    (:query @(rf/subscribe [:fulltopic category topic]))))
+
+(defn fake-status-list
+  [n db]
+  (take n (repeat (:dummy-list db))))
+
+(rf/reg-sub
+ :get-fake-status-list
+ (fn [db [_ n]]
+   (fake-status-list n db)))

@@ -8,7 +8,8 @@
 (rf/reg-event-db
  :no-got-cats
  (fn [db [_ details]]
-   (.log js/console details)))
+   (.log js/console details)
+   db))
 
 (rf/reg-event-db
  :got-cats
@@ -24,7 +25,7 @@
    {:db (assoc db :cats-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/cats"
-                 :timeout 15000
+                 :timeout 6000
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-cats]
@@ -33,6 +34,7 @@
 (rf/reg-event-db
  ::initialize-db
  (fn  [_ _]
+  (rf/dispatch [:get-cats])
    db/default-db))
 
 ;; on http effects handler for re-frame:

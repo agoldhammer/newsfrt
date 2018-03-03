@@ -18,6 +18,8 @@
 }
 
 .cat-btn {
+    overflow: hidden;
+    text-overflow: ellipsis;
     border-radius: 5px;
     margin-left: 1px;
     margin-top: 2px;
@@ -26,6 +28,8 @@
 }
 
 .topic-btn {
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 70%;
     margin: 2px;
     font-size: 80%;
@@ -47,14 +51,14 @@
     "footer";
 }
 
-.article {
-    display: grid;
-    grid-gap: 0px;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-	"art-header"
-	"art-content";
-}
+/* .article { */
+/*     display: grid; */
+/*     grid-gap: 0px; */
+/*     grid-template-columns: 1fr; */
+/*     grid-template-areas: */
+/*	"art-header" */
+/*	"art-content"; */
+/* } */
 
 @media (min-width: 500px) {
   .wrapper {
@@ -83,6 +87,9 @@
    nav ul {
      flex-direction: column;
    }
+   content ul {
+       flex-direction: column;
+   }
 }
 
 body {
@@ -93,22 +100,25 @@ body {
 }
 
 .header {
+    height: 10vh;
     background-color: lightyellow;
 }
 
-@media (min-width: 700px) {
-    .content {
-	display: grid;
-	grid-gap: 5px;
-	grid-template-columns: 1fr 1fr;
-	grid-template-areas:
-	"article article"
-    }
-}
+/* @media (min-width: 700px) { */
+/*     .content { */
+/*	display: grid; */
+/*	grid-gap: 5px; */
+/*	grid-template-columns: 1fr 1fr; */
+/*	grid-template-areas: */
+/*	"article article" */
+/*     } */
+/* } */
 
 .content {
+    height: 75vh;
     margin: 0px;
     padding: 0px;
+    overflow: scroll;
     font-family: Verdana;
     background-color: lightgray;
 }
@@ -122,28 +132,35 @@ body {
 }
 
 .main-head {
-    height: 100px;
+    display: flex;
+    flex-direction: row;
+    height: 15vh;
     padding: 20px;
     color: white;
     background-color: teal;
 }
 
 .main-nav {
+    height: 75vh;
+    overflow: scroll;
     background-color: lightcyan;
 }
 
 .main-footer {
+    height: 5vh;
     background-color: powderblue;
 }
 
-.left-nav {
-    list-style-type: none;
-}
+/* .left-nav { */
+/*     list-style-type: none; */
+/* } */
 
 .article {
-    width: 350px;
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
     padding-left: 10px;
-    margin-bottom: 5px;
+    margin: 5px;
     border: 2px solid lightgray;
     border-radius: 10px;
     background-color: lightgray;
@@ -164,6 +181,7 @@ body {
 
 .art-content {
     /* border: 2px solid lightblue; */
+    min-height: 80%;
     background-color: white;
     /* border-top: none; */
     border-radius: 10px;
