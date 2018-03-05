@@ -6,7 +6,7 @@
 
 
 (rf/reg-event-db
- :no-got-cats
+ :ajax-error
  (fn [db [_ details]]
    (.log js/console details)
    db))
@@ -19,6 +19,14 @@
     (assoc :cats-loading? false)
     (assoc :navdata result))))
 
+(rf/reg-event-db
+ :got-recent
+ (fn [db [_ result]]
+   (->
+    db
+    (assoc :recent-loading? false)
+    (assoc :recent result)) ))
+
 (rf/reg-event-fx
  :get-cats
  (fn [{:keys [db]} _]
@@ -29,7 +37,20 @@
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-cats]
-                 :on-failure [:no-got-cats]}}))
+                 :on-failure [:ajax-error]}}))
+
+(rf/reg-event-fx
+ :get-recent
+ (fn [{:keys [db]} _]
+   {:db (assoc db :recent-loading? true)
+    :http-xhrio {:method :get
+                 :uri "http://localhost:5000/json/recent"
+                 :timeout 6000
+                 :format (ajax/json-request-format)
+                 :response-format
+                 (ajax/json-response-format {:keywords? true})
+                 :on-success [:got-recent]
+                 :on-failure [:ajax-error]}}))
 
 (rf/reg-event-db
  ::initialize-db

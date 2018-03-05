@@ -42,6 +42,7 @@
  (fn [db [_ category topic]]
    (:query @(rf/subscribe [:fulltopic category topic]))))
 
+;; this section is for testing
 (defn fake-status-list
   [n db]
   (take n (repeat (:dummy-list db))))
@@ -50,3 +51,9 @@
  :get-fake-status-list
  (fn [db [_ n]]
    (fake-status-list n db)))
+;;;;;;;
+
+(rf/reg-sub
+ :get-recent
+ (fn [db]
+   (:recent db)))

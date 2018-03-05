@@ -25,9 +25,9 @@
        :level :level4])))
 
 (defn make-article
-  [{:keys [source date author text]}]
+  [{:keys [source created_at author text]}]
   [:article.article
-   [:p.art-header (string/join " " [author date source])]
+   [:p.art-header (string/join " " [author created_at source])]
    [:p.art-content text]])
 
 (defn topic-button
@@ -50,8 +50,10 @@
                  (itemcount)]
    (into [:nav.main-nav] (category-buttons))
    #_[:content.content "content"]
-   (into [:content.content] (mapv make-article @(rf/subscribe
+   #_(into [:content.content] (mapv make-article @(rf/subscribe
                                                  [:get-fake-status-list 23])))
+   (into [:content.content] (mapv make-article @(rf/subscribe
+                                                 [:get-recent])))
    [:aside.side "sidetext"]
    [:div.ad "ad-text"]
    [:footer.main-footer "footer text"]])
