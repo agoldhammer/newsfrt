@@ -118,7 +118,7 @@ body {
     height: 75vh;
     margin: 0px;
     padding: 0px;
-    overflow: scroll;
+    overflow: auto;
     font-family: Verdana;
     background-color: lightgray;
 }
@@ -142,7 +142,7 @@ body {
 
 .main-nav {
     height: 75vh;
-    overflow: scroll;
+    overflow: auto;
     background-color: lightcyan;
 }
 
@@ -188,4 +188,8 @@ body {
     padding: 3px;
     margin: 0px;
     font-size: 110%;
+}
+
+a {
+    color: red;
 }

@@ -46,7 +46,21 @@
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/recent"
                  :timeout 6000
-                 :format (ajax/json-request-format)
+                 :format (ajax/url-request-format :java)
+                 :response-format
+                 (ajax/json-response-format {:keywords? true})
+                 :on-success [:got-recent]
+                 :on-failure [:ajax-error]}}))
+
+(rf/reg-event-fx
+ :get-query
+ (fn [{:keys [db]} _]
+   {:db (assoc db :recent-loading? true)
+    :http-xhrio {:method :get
+                 :uri "http://localhost:5000/json/qry"
+                 :timeout 6000
+                 :format (ajax/url-request-format :java)
+                 :params {:data "-H 3 Trump"}
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-recent]
@@ -56,23 +70,5 @@
  ::initialize-db
  (fn  [_ _]
   (rf/dispatch [:get-cats])
+  (rf/dispatch [:get-recent])
    db/default-db))
-
-;; on http effects handler for re-frame:
-;; https://github.com/Day8/re-frame-http-fx
-
-;; (defn handler
-;;   [response]
-;;   (.log js/console (get-in response [:cats :Culture])))
-
-;; (defn error-handler
-;;   [{:keys [status status-text failure]}]
-;;   (println "Error:" status status-text failure))
-
-;; (defn ajax-fetch [uri]
-;;   (ajax/GET uri
-;;             {:keywords? true
-;;              :format :json
-;;              :response-format :json
-;;              :handler handler
-;;              :error-handler error-handler}))

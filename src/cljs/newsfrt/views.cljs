@@ -24,11 +24,13 @@
        :label (str icount)
        :level :level4])))
 
+(declare urlize)
+
 (defn make-article
   [{:keys [source created_at author text]}]
   [:article.article
    [:p.art-header (string/join " " [author created_at source])]
-   [:p.art-content text]])
+   (urlize text)])
 
 (defn topic-button
   [topic]
@@ -54,6 +56,27 @@
                                                  [:get-fake-status-list 23])))
    (into [:content.content] (mapv make-article @(rf/subscribe
                                                  [:get-recent])))
-   [:aside.side "sidetext"]
+   [:aside.side [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]]]
    [:div.ad "ad-text"]
    [:footer.main-footer "footer text"]])
+
+
+(defn link-url
+  [url]
+  [:a {:href url :target "_blank"} " ...more \u21aa"])
+
+(def re-url #"https?://\S+")
+
+(defn extract-urls
+  [text]
+  (re-seq re-url text))
+
+(defn suppress-urls
+  [text]
+  (string/replace text re-url ""))
+
+(defn urlize
+  [text]
+  (let [urls (extract-urls text)
+        modtext (suppress-urls text)]
+    (into [:p.art-content (suppress-urls text)] (mapv link-url urls))))
