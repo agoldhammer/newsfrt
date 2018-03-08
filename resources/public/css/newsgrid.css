@@ -39,9 +39,16 @@
     background-color: yellow;
 }
 
+.time-btn {
+    width: 5%;
+    background-color: white;
+    color: black;
+    font-size: 10px;
+}
+
 .wrapper {
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 5px;
   grid-template-areas:
     "header"
     "nav"
@@ -115,12 +122,16 @@ body {
 /* } */
 
 .content {
-    height: 75vh;
+    height: 70vh;
     margin: 0px;
     padding: 0px;
     overflow: auto;
     font-family: Verdana;
     background-color: lightgray;
+}
+
+.query {
+    max-width: 400px;
 }
 
 .ad {
@@ -133,15 +144,37 @@ body {
 
 .main-head {
     display: flex;
-    flex-direction: row;
-    height: 15vh;
-    padding: 20px;
+    flex-direction: column;
+    height: 20vh;
+    padding: 5px;
     color: white;
     background-color: teal;
 }
 
+.main-head p {
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.custom-query {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.custom-query span {
+    margin-right: 3px;
+}
+
+.button-bar {
+    padding-left: 10px;
+}
+
+.main-head span {
+    font-size: 80%;
+}
+
 .main-nav {
-    height: 75vh;
+    height: 70vh;
     overflow: auto;
     background-color: lightcyan;
 }
@@ -190,6 +223,10 @@ body {
     font-size: 110%;
 }
 
-a {
+.art-content a {
     color: red;
+}
+
+.art-content a:visited {
+    color: green;
 }

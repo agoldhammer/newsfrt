@@ -54,13 +54,13 @@
 
 (rf/reg-event-fx
  :get-query
- (fn [{:keys [db]} _]
+ (fn [{:keys [db]} [_ query]]
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/qry"
                  :timeout 6000
                  :format (ajax/url-request-format :java)
-                 :params {:data "-H 3 Trump"}
+                 :params {:data query}
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-recent]
@@ -72,3 +72,18 @@
   (rf/dispatch [:get-cats])
   (rf/dispatch [:get-recent])
    db/default-db))
+
+(rf/reg-event-db
+ :topic-req
+ (fn [db [_ topic]]
+   (println topic)
+   (rf/dispatch [:get-query (str "-H 3 *" topic)])
+   db))
+
+
+(rf/reg-event-db
+ :cat-req
+ (fn [db [_ category]]
+   (println (name category))
+   (rf/dispatch [:get-query (str "-H 3 *" (name category))])
+   db))

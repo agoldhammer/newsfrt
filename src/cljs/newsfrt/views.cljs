@@ -5,12 +5,6 @@
             [clojure.string :as string]
             ))
 
-(defn title []
-  (let [name (rf/subscribe [::subs/name])]
-    [re-com/title
-     :label (str "Hello from " @name)
-     :level :level1]))
-
 (defn itemcount []
   (let [icount @(rf/subscribe [:item-count])
         loading? @(rf/subscribe [:cats-loading?])]
@@ -19,7 +13,8 @@
        :color "yellow"
          :size :regular]
       #_[:p "pending"]
-      [re-com/title
+      [:span (str "  Items in database: " icount)]
+      #_[re-com/title
        :style {:color :white :margin "10px"}
        :label (str icount)
        :level :level4])))
@@ -34,22 +29,55 @@
 
 (defn topic-button
   [topic]
-  [:button.topic-btn {:id topic} topic])
+  [:button.topic-btn {:id topic
+                      :on-click #(rf/dispatch [:topic-req topic])}
+   topic])
 
 (defn category-button
   [category]
   (let [topics @(rf/subscribe [:topics-by-category category])]
-    (into [:div [:button.cat-btn {:id category} (name category)]]
+    (into [:div [:button.cat-btn {:id category
+                                  :on-click #(rf/dispatch [:cat-req category])}
+                 (name category)]]
         (mapv #(topic-button %1) topics))))
 
 (defn category-buttons []
   (let [categories @(rf/subscribe [:categories])]
     (mapv category-button categories)))
 
+(def time-values ["3 hrs" "-H 3"
+                  "6 hrs" "-H 6"
+                  "12 hrs" "-H 12"
+                  "1 day" "-d 1"
+                  "2 days" "-d 2"
+                  "3 days" "-d 3"
+                  "Custom" :custom])
+
+(defn time-button [[text val]]
+  [:button.time-btn {:qry val} text])
+
+(defn time-buttons []
+  (into [:div.button-bar ] (mapv time-button (partition 2 time-values)) ))
+
+#_(defn head-panel []
+  [:header.main-head [[:p "The Latest News    "
+                       [:i.fab.fa-500px {:style {:margin "5px"}}]
+                       (itemcount)]]])
+
+(defn custom-query []
+  [:div.custom-query [:span "Custom Query: "]
+   [:input.query {:type "text"}]])
+
+(defn head-panel []
+  [:header.main-head [:p "Noozewire Latest News  "
+                      [:i.fab.fa-500px {:style {:margin "5px"}}]
+                      (itemcount)]
+   (time-buttons)
+   (custom-query)])
+
 (defn main-panel []
-  [:div.wrapper [:header.main-head "The Latest News    "
-                 [:i.fab.fa-500px {:style {:margin "5px"}}]
-                 (itemcount)]
+  [:div.wrapper
+   (head-panel)
    (into [:nav.main-nav] (category-buttons))
    #_[:content.content "content"]
    #_(into [:content.content] (mapv make-article @(rf/subscribe
@@ -60,6 +88,8 @@
    [:div.ad "ad-text"]
    [:footer.main-footer "footer text"]])
 
+;; functions below are used in building articles
+;; need to turn urls into links and eliminate from text
 
 (defn link-url
   [url]
@@ -80,3 +110,5 @@
   (let [urls (extract-urls text)
         modtext (suppress-urls text)]
     (into [:p.art-content (suppress-urls text)] (mapv link-url urls))))
+
+;; --- end of urlize-related funcs ----------
