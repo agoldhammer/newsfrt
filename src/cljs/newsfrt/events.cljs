@@ -6,8 +6,14 @@
 
 
 (rf/reg-event-db
+ :alert
+ (fn [db [_ msg]]
+   (assoc db :alert msg)))
+
+(rf/reg-event-db
  :ajax-error
  (fn [db [_ details]]
+   (rf/dispatch [:alert details])
    (.log js/console details)
    db))
 
@@ -22,6 +28,7 @@
 (rf/reg-event-db
  :got-recent
  (fn [db [_ result]]
+   (when (empty? result) (rf/dispatch [:alert "Server returned nothing"]))
    (->
     db
     (assoc :recent-loading? false)

@@ -166,7 +166,17 @@ body {
 }
 
 .custom-query span {
+    padding-top: 8px;
+    padding-right: 4px;
     margin-right: 3px;
+}
+
+.datepicker {
+    margin-left: 10px;
+}
+
+.alert-box {
+    width: 40%;
 }
 
 .button-bar {

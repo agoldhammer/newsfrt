@@ -67,18 +67,37 @@
 
 (defn custom-query []
   [re-com/h-box :class "custom-query"
+   :gap "5px"
    :children [
               [:span "Custom Query: "]
               [re-com/input-text :model ""
                :placeholder "Type custom query text here"
-               :on-change #(println %1)]]])
+               :on-change #(println %1)]
+              #_[re-com/datepicker-dropdown
+               :on-change #(println %1)
+               :class "datepicker"
+               :show-today? true]]])
+
+
+(defn alert-box []
+  (let [msg @(rf/subscribe [:alert?])]
+    (if msg
+      (re-com/alert-box :id "alert-box"
+                        :heading (str "Info: " msg)
+                        :alert-type :warning
+                        :class "alert-box"
+                        :closeable? true
+                        :on-close (fn [id](rf/dispatch [:alert nil])))
+      nil)))
 
 (defn head-panel []
-  [:header.main-head [:p "Noozewire Latest News  "
-                      [:i.fab.fa-500px {:style {:margin "5px"}}]
-                      (itemcount)]
-   (time-buttons)
-   (custom-query)])
+  (let [abox (alert-box)]
+    [:header.main-head [:p "Noozewire Latest News  "
+                        [:i.fab.fa-500px {:style {:margin "5px"}}]
+                        (itemcount)]
+     (when abox abox)
+     (time-buttons)
+     (custom-query)]))
 
 (defn main-panel []
   [:div.wrapper

@@ -77,3 +77,9 @@
  :time-button-active-id
  (fn [db]
    (get-in db [:time-button-bar :active])))
+
+
+(rf/reg-sub
+ :alert?
+ (fn [db]
+   (:alert db)))
