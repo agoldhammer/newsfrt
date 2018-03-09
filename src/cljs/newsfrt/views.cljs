@@ -12,12 +12,7 @@
       [re-com/throbber
        :color "yellow"
          :size :regular]
-      #_[:p "pending"]
-      [:span (str "  Items in database: " icount)]
-      #_[re-com/title
-       :style {:color :white :margin "10px"}
-       :label (str icount)
-       :level :level4])))
+      [:span (str "  Items in database: " icount)])))
 
 (declare urlize)
 
@@ -28,24 +23,24 @@
    (urlize text)])
 
 (defn topic-button
-  [topic]
+  [[topic desc]]
   [:button.topic-btn {:id topic
                       :on-click #(rf/dispatch [:topic-req topic])}
-   topic])
+   desc])
 
 (defn category-button
   [category]
-  (let [topics @(rf/subscribe [:topics-by-category category])]
+  (let [topic-descs @(rf/subscribe [:topic-descs-by-category category])]
     (into [:div [:button.cat-btn {:id category
                                   :on-click #(rf/dispatch [:cat-req category])}
                  (name category)]]
-        (mapv #(topic-button %1) topics))))
+        (mapv #(topic-button %1) topic-descs))))
 
 (defn category-buttons []
   (let [categories @(rf/subscribe [:categories])]
     (mapv category-button categories)))
 
-(def time-values ["3 hrs" "-H 3"
+#_(def time-values ["3 hrs" "-H 3"
                   "6 hrs" "-H 6"
                   "12 hrs" "-H 12"
                   "1 day" "-d 1"
@@ -53,20 +48,30 @@
                   "3 days" "-d 3"
                   "Custom" :custom])
 
-(defn time-button [[text val]]
-  [:button.time-btn {:qry val} text])
+(defn time-button [button-id]
+  (let [active? (= button-id @(rf/subscribe [:time-button-active-id]))
+        cls (if active? "time-btn time-btn-active" "time-btn")]
+    [:button {:id button-id
+              :class cls} @(rf/subscribe [:button-id-to-text
+                                          button-id])]))
 
 (defn time-buttons []
-  (into [:div.button-bar ] (mapv time-button (partition 2 time-values)) ))
+  (let [button-ids @(rf/subscribe [:get-time-button-ids])]
+    (into [:div.button-bar
+           {:on-click #(println (-> % .-target .-id))}]
+          (mapv time-button button-ids) )))
 
-#_(defn head-panel []
-  [:header.main-head [[:p "The Latest News    "
-                       [:i.fab.fa-500px {:style {:margin "5px"}}]
-                       (itemcount)]]])
-
-(defn custom-query []
+#_(defn custom-query []
   [:div.custom-query [:span "Custom Query: "]
    [:input.query {:type "text"}]])
+
+(defn custom-query []
+  [re-com/h-box :class "custom-query"
+   :children [
+              [:span "Custom Query: "]
+              [re-com/input-text :model ""
+               :placeholder "Type custom query text here"
+               :on-change #(println %1)]]])
 
 (defn head-panel []
   [:header.main-head [:p "Noozewire Latest News  "

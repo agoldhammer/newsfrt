@@ -32,6 +32,11 @@
    (mapv #(:topic %1) (get-in db [:navdata :cats category]))))
 
 (rf/reg-sub
+ :topic-descs-by-category
+ (fn [db [_ category]]
+   (mapv #((juxt :topic :desc) %1) (get-in db [:navdata :cats category]))))
+
+(rf/reg-sub
  :fulltopic
  (fn [db [_ category topic]]
    (let [topics (get-in db [:navdata :cats category])]
@@ -57,3 +62,18 @@
  :get-recent
  (fn [db]
    (:recent db)))
+
+(rf/reg-sub
+ :get-time-button-ids
+ (fn [db]
+   (keys (get-in db [:time-button-bar :ids]))))
+
+(rf/reg-sub
+ :button-id-to-text
+ (fn [db [_ button-id]]
+   (nth (get-in db [:time-button-bar :ids button-id]) 0)))
+
+(rf/reg-sub
+ :time-button-active-id
+ (fn [db]
+   (get-in db [:time-button-bar :active])))

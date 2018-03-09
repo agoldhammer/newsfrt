@@ -46,6 +46,10 @@
     font-size: 10px;
 }
 
+.time-btn-active {
+    background-color: lightblue;
+}
+
 .wrapper {
   display: grid;
   grid-gap: 5px;
@@ -145,7 +149,7 @@ body {
 .main-head {
     display: flex;
     flex-direction: column;
-    height: 20vh;
+    height: 25vh;
     padding: 5px;
     color: white;
     background-color: teal;
