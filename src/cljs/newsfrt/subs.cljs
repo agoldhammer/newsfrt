@@ -74,6 +74,12 @@
    (nth (get-in db [:time-button-bar :ids button-id]) 0)))
 
 (rf/reg-sub
+ :query-time
+ (fn [db]
+   (nth (get-in db [:time-button-bar :ids
+                    @(rf/subscribe [:time-button-active-id])]) 1)))
+
+(rf/reg-sub
  :time-button-active-id
  (fn [db]
    (get-in db [:time-button-bar :active])))
@@ -83,3 +89,13 @@
  :alert?
  (fn [db]
    (:alert db)))
+
+(rf/reg-sub
+ :get-custom-query
+ (fn [db]
+   (get-in db [:custom-query :text])))
+
+(rf/reg-sub
+ :get-custom-query-status
+ (fn [db]
+   (get-in db [:custom-query :status])))

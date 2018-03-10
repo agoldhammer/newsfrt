@@ -83,14 +83,28 @@
 (rf/reg-event-db
  :topic-req
  (fn [db [_ topic]]
-   (println topic)
-   (rf/dispatch [:get-query (str "-H 3 *" topic)])
+   (let [time-part @(rf/subscribe [:query-time])]
+     (rf/dispatch [:get-query (str time-part " *" topic)]))
    db))
 
 
 (rf/reg-event-db
  :cat-req
  (fn [db [_ category]]
-   (println (name category))
    (rf/dispatch [:get-query (str "-H 3 *" (name category))])
    db))
+
+(rf/reg-event-db
+ :set-active-time-button
+ (fn [db [_ activate-id]]
+   (assoc-in db [:time-button-bar :active] activate-id)))
+
+(rf/reg-event-db
+ :set-custom-query
+ (fn [db [_ text]]
+   (assoc-in db [:custom-query :text] text)))
+
+(rf/reg-event-db
+ :set-custom-query-status
+ (fn [db [_ status]]
+   (assoc-in db [:custom-query :status] status)))

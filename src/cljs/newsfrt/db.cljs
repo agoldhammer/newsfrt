@@ -7,6 +7,9 @@
                 :created_at "1/1/01"
                 :author "NYTimes"
                 :text "This is dummy text for testing. Making it longer, just for fun. Today the president announced nothing. http://prospect.org"}
+   :custom-query {:text ""
+                  :status :success
+                  }
    :time-button-bar {:active :tb0
                      :ids {:tb0 ["3 hrs" "-H 3"]
                            :tb1 ["6 hrs" "-H 6"]

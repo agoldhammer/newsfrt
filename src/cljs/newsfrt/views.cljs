@@ -3,6 +3,7 @@
             [re-com.core :as re-com]
             [newsfrt.subs :as subs]
             [clojure.string :as string]
+            [goog.string :as gstring]
             ))
 
 (defn itemcount []
@@ -58,25 +59,36 @@
 (defn time-buttons []
   (let [button-ids @(rf/subscribe [:get-time-button-ids])]
     (into [:div.button-bar
-           {:on-click #(println (-> % .-target .-id))}]
+           {:on-click #(rf/dispatch [:set-active-time-button
+                                     (keyword
+                                      (-> % .-target .-id))])}]
           (mapv time-button button-ids) )))
 
-#_(defn custom-query []
-  [:div.custom-query [:span "Custom Query: "]
-   [:input.query {:type "text"}]])
+(defn verify-custom-query []
+  (let [text  @(rf/subscribe [:get-custom-query])]
+    (if (re-find #"[\*\.,;\-]" text)
+      (rf/dispatch [:set-custom-query-status :error])
+      (rf/dispatch [:set-custom-query-status :success]))))
+
+(defn on-custom-query-change [text]
+  (rf/dispatch-sync [:set-custom-query  text])
+  (verify-custom-query))
 
 (defn custom-query []
   [re-com/h-box :class "custom-query"
    :gap "5px"
    :children [
               [:span "Custom Query: "]
-              [re-com/input-text :model ""
+              [re-com/input-text
+               :model @(rf/subscribe [:get-custom-query])
                :placeholder "Type custom query text here"
-               :on-change #(println %1)]
-              #_[re-com/datepicker-dropdown
-               :on-change #(println %1)
-               :class "datepicker"
-               :show-today? true]]])
+               :on-change #(on-custom-query-change %1)
+               :change-on-blur? false
+               :status @(rf/subscribe [:get-custom-query-status])
+               :status-icon? true
+               :status-tooltip "Characters * - , ; . not allowed"
+               ]
+              ]])
 
 
 (defn alert-box []
@@ -132,7 +144,7 @@
 (defn urlize
   [text]
   (let [urls (extract-urls text)
-        modtext (suppress-urls text)]
-    (into [:p.art-content (suppress-urls text)] (mapv link-url urls))))
+        modtext (gstring/unescapeEntities (suppress-urls text))]
+    (into [:p.art-content modtext] (mapv link-url urls))))
 
 ;; --- end of urlize-related funcs ----------
