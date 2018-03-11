@@ -6,7 +6,37 @@
             [goog.string :as gstring]
             ))
 
-(defn itemcount []
+;; components
+;; main-panel
+;;
+;; -div.wrapper
+;;
+;; --head-panel
+;; ---titleslug
+;; ---icon
+;; ---itemcount
+;; ---time-buttons
+;; ---custom-query
+;;
+;; --nav.main.nav
+;; ---recent-button
+;; ---category-button *
+;; ----topic-buttons
+;;
+;; --content.content
+;; ---article*
+;; ----art-header
+;; ----art-content
+;;
+;; --aside.side
+;; --div.ad
+;; --footer.main-footer
+;;
+
+;; header item
+(defn itemcount
+  "displays count of topic items in database"
+  []
   (let [icount @(rf/subscribe [:item-count])
         loading? @(rf/subscribe [:cats-loading?])]
     (if loading?
@@ -39,7 +69,8 @@
   [category]
   (let [topic-descs @(rf/subscribe [:topic-descs-by-category category])]
     (into [:div [:button.cat-btn {:id category
-                                  :on-click #(rf/dispatch [:cat-req category])}
+                                  :on-click #(rf/dispatch [:category-req
+                                                           category])}
                  (name category)]]
         (mapv #(topic-button %1) topic-descs))))
 
@@ -86,9 +117,13 @@
                :status @(rf/subscribe [:get-custom-query-status])
                :status-icon? true
                :status-tooltip "Characters * - , ; . not allowed"
+               :attr {:on-key-press #(when (= (.-key %1) "Enter")
+                                       #_(println "Enter")
+                                       (rf/dispatch [:custom-query-req
+                                                     @(rf/subscribe
+                                                      [:get-custom-query])])) }
                ]
               ]])
-
 
 (defn alert-box []
   (let [msg @(rf/subscribe [:alert?])]

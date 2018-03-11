@@ -1,6 +1,7 @@
 (ns newsfrt.events
   (:require [re-frame.core :as rf]
             [newsfrt.db :as db]
+            [clojure.string :as string]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]))
 
@@ -92,12 +93,23 @@
      (rf/dispatch [:get-query (str time-part " *" topic)]))
    db))
 
+(rf/reg-event-db
+ :category-req
+ (fn [db [_ category]]
+   (let [time-part @(rf/subscribe [:query-time])
+         topics    @(rf/subscribe [:topics-by-category category])
+         text-part (string/join (map #(str " *" %1) topics))]
+     (rf/dispatch [:get-query (string/join " " [time-part text-part])]))
+   db))
 
 (rf/reg-event-db
- :cat-req
- (fn [db [_ category]]
-   (rf/dispatch [:get-query (str "-H 3 *" (name category))])
+ :custom-query-req
+ (fn [db [_ text]]
+   (let [time-part @(rf/subscribe [:query-time])]
+     (rf/dispatch [:get-query (string/join " " [time-part text])]))
    db))
+
+
 
 (rf/reg-event-db
  :set-active-time-button
