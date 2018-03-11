@@ -76,9 +76,14 @@
 (rf/reg-event-db
  ::initialize-db
  (fn  [_ _]
-  (rf/dispatch [:get-cats])
-  (rf/dispatch [:get-recent])
    db/default-db))
+
+(rf/reg-event-db
+ :initialize-content
+ (fn [db _]
+   (rf/dispatch [:get-cats])
+   (rf/dispatch [:get-recent])
+   db))
 
 (rf/reg-event-db
  :topic-req

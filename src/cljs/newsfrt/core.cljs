@@ -19,4 +19,5 @@
 (defn ^:export init []
   (rf/dispatch-sync [::events/initialize-db])
   (dev-setup)
-  (mount-root))
+  (mount-root)
+  (rf/dispatch [:initialize-content]))

@@ -27,6 +27,17 @@
     color: fuchsia;
 }
 
+.recent-btn {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 5px;
+    margin-left: 1px;
+    margin-top: 2px;
+    width: 90%;
+    background-color: rgb(63, 121, 158);
+    color: white;
+}
+
 .topic-btn {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -35,7 +46,7 @@
     font-size: 80%;
 }
 
-.cat-btn:hover, .topic-btn:hover {
+.cat-btn:hover, .topic-btn:hover, .recent-btn:hover {
     background-color: yellow;
 }
 

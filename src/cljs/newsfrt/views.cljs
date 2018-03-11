@@ -23,6 +23,12 @@
    [:p.art-header (string/join " " [author created_at source])]
    (urlize text)])
 
+(defn recent-button
+  []
+  [:button.recent-btn {:id "recent"
+                       :on-click #(rf/dispatch [:get-recent])}
+   "Latest!"])
+
 (defn topic-button
   [[topic desc]]
   [:button.topic-btn {:id topic
@@ -39,15 +45,8 @@
 
 (defn category-buttons []
   (let [categories @(rf/subscribe [:categories])]
-    (mapv category-button categories)))
-
-#_(def time-values ["3 hrs" "-H 3"
-                  "6 hrs" "-H 6"
-                  "12 hrs" "-H 12"
-                  "1 day" "-d 1"
-                  "2 days" "-d 2"
-                  "3 days" "-d 3"
-                  "Custom" :custom])
+    (into [[:div (recent-button)]]
+          (mapv category-button categories))))
 
 (defn time-button [button-id]
   (let [active? (= button-id @(rf/subscribe [:time-button-active-id]))
@@ -104,7 +103,7 @@
 
 (defn head-panel []
   (let [abox (alert-box)]
-    [:header.main-head [:p "Noozewire Latest News  "
+    [:header.main-head [:span "Noozewire Latest News  "
                         [:i.fab.fa-500px {:style {:margin "5px"}}]
                         (itemcount)]
      (when abox abox)
@@ -115,9 +114,6 @@
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
-   #_[:content.content "content"]
-   #_(into [:content.content] (mapv make-article @(rf/subscribe
-                                                 [:get-fake-status-list 23])))
    (into [:content.content] (mapv make-article @(rf/subscribe
                                                  [:get-recent])))
    [:aside.side [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]]]
