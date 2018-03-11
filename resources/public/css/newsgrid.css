@@ -73,15 +73,6 @@
     "footer";
 }
 
-/* .article { */
-/*     display: grid; */
-/*     grid-gap: 0px; */
-/*     grid-template-columns: 1fr; */
-/*     grid-template-areas: */
-/*	"art-header" */
-/*	"art-content"; */
-/* } */
-
 @media (min-width: 500px) {
   .wrapper {
     grid-template-columns: 1fr 3fr;
@@ -166,9 +157,8 @@ body {
     background-color: teal;
 }
 
-.main-head p {
+.main-head span {
     padding-left: 20px;
-    font-size: 14px;
 }
 
 .custom-query {
@@ -246,6 +236,10 @@ body {
     padding: 3px;
     margin: 0px;
     font-size: 110%;
+}
+
+.art-content:hover {
+    border: 1px solid red;
 }
 
 .art-content a {

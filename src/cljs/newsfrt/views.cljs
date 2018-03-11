@@ -118,7 +118,7 @@
                                                  [:get-recent])))
    [:aside.side [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]]]
    [:div.ad "ad-text"]
-   [:footer.main-footer "footer text"]])
+   [:footer.main-footer "News brought to you by Noozewire"]])
 
 ;; functions below are used in building articles
 ;; need to turn urls into links and eliminate from text
