@@ -79,6 +79,8 @@
     (into [[:div (recent-button)]]
           (mapv category-button categories))))
 
+;; time buttons
+
 (defn time-button [button-id]
   (let [active? (= button-id @(rf/subscribe [:time-button-active-id]))
         cls (if active? "time-btn time-btn-active" "time-btn")]
@@ -93,6 +95,14 @@
                                      (keyword
                                       (-> % .-target .-id))])}]
           (mapv time-button button-ids) )))
+
+(defn custom-calendar []
+  [re-com/modal-panel
+   :backdrop-on-click (rf/dispatch [:toggle-show-custom-time-panel])
+   :width "399px"
+   :children [[re-com.datepicker]]])
+
+;; custom query
 
 (defn verify-custom-query []
   (let [text  @(rf/subscribe [:get-custom-query])]

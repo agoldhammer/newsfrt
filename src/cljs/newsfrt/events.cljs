@@ -125,3 +125,8 @@
  :set-custom-query-status
  (fn [db [_ status]]
    (assoc-in db [:custom-query :status] status)))
+
+(rf/reg-event-db
+ :toggle-show-custom-time-panel
+ (fn [db]
+   (update db :show-custom-time-panel? not)))

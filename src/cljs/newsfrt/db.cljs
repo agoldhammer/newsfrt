@@ -2,6 +2,7 @@
 
 (def default-db
   {:name "re-frame"
+   :show-custom-time-panel? false
    :cats-loading? false
    :dummy-list {:source "TweetDeck"
                 :created_at "1/1/01"

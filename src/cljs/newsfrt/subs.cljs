@@ -99,3 +99,8 @@
  :get-custom-query-status
  (fn [db]
    (get-in db [:custom-query :status])))
+
+(rf/reg-sub
+ :show-custom-time-panel?
+ (fn [db]
+   (:show-custom-time-panel? db)))
