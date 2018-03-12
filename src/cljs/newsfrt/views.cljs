@@ -98,9 +98,9 @@
 
 (defn custom-calendar []
   [re-com/modal-panel
-   :backdrop-on-click (rf/dispatch [:toggle-show-custom-time-panel])
-   :width "399px"
-   :children [[re-com.datepicker]]])
+   :backdrop-on-click #(rf/dispatch [:toggle-show-custom-time-panel])
+   ;; :wrap-nicely? true
+   :child [:span "message"]])
 
 ;; custom query
 
@@ -161,7 +161,11 @@
    (into [:nav.main-nav] (category-buttons))
    (into [:content.content] (mapv make-article @(rf/subscribe
                                                  [:get-recent])))
-   [:aside.side [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]]]
+   #_(custom-calendar)
+   (let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
+     [:aside.side (if show-cal
+                    (custom-calendar)
+                    [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]])])
    [:div.ad "ad-text"]
    [:footer.main-footer "News brought to you by Noozewire"]])
 

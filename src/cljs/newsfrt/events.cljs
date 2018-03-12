@@ -114,6 +114,7 @@
 (rf/reg-event-db
  :set-active-time-button
  (fn [db [_ activate-id]]
+   (when (= activate-id :tb6) (rf/dispatch [:toggle-show-custom-time-panel]))
    (assoc-in db [:time-button-bar :active] activate-id)))
 
 (rf/reg-event-db
