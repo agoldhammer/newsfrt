@@ -109,8 +109,6 @@
      (rf/dispatch [:get-query (string/join " " [time-part text])]))
    db))
 
-
-
 (rf/reg-event-db
  :set-active-time-button
  (fn [db [_ activate-id]]
@@ -131,3 +129,8 @@
  :toggle-show-custom-time-panel
  (fn [db]
    (update db :show-custom-time-panel? not)))
+
+(rf/reg-event-db
+ :set-custom-date
+ (fn [db [_ start-or-end date]]
+   (assoc-in db [:custom-date start-or-end] date)))

@@ -1,4 +1,5 @@
-(ns newsfrt.db)
+(ns newsfrt.db
+  (:require [cljs-time.core :refer [now]]))
 
 (def default-db
   {:name "re-frame"
@@ -11,6 +12,8 @@
    :custom-query {:text ""
                   :status :success
                   }
+   :custom-date {:start (now)
+                 :end   (now)}
    :time-button-bar {:active :tb0
                      :ids {:tb0 ["3 hrs" "-H 3"]
                            :tb1 ["6 hrs" "-H 6"]

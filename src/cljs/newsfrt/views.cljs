@@ -1,6 +1,9 @@
 (ns newsfrt.views
   (:require [re-frame.core :as rf]
             [re-com.core :as re-com]
+            [cljs-time.core :refer [now]]
+            [cljs-time.coerce  :refer [to-local-date]]
+            [cljs-time.format  :refer [formatter unparse]]
             [newsfrt.subs :as subs]
             [clojure.string :as string]
             [goog.string :as gstring]
@@ -96,11 +99,21 @@
                                       (-> % .-target .-id))])}]
           (mapv time-button button-ids) )))
 
+(defn cal [id]
+  [re-com/datepicker :on-change #(rf/dispatch [:set-custom-date id %])
+   :model @(rf/subscribe [:get-custom-date id])
+   :attr {:id id}
+   :show-today? true])
+
 (defn custom-calendar []
+  #_(rf/dispatch [:set-custom-date :start (now)])
+  #_(rf/dispatch [:set-custom-date :end (now)])
   [re-com/modal-panel
    :backdrop-on-click #(rf/dispatch [:toggle-show-custom-time-panel])
-   ;; :wrap-nicely? true
-   :child [:span "message"]])
+   :wrap-nicely? true
+   ;; :child [:span "message"]
+   :child [re-com/h-box :gap "20px"
+              :children [(cal :start) (cal :end)]]])
 
 ;; custom query
 
@@ -161,7 +174,6 @@
    (into [:nav.main-nav] (category-buttons))
    (into [:content.content] (mapv make-article @(rf/subscribe
                                                  [:get-recent])))
-   #_(custom-calendar)
    (let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
      [:aside.side (if show-cal
                     (custom-calendar)

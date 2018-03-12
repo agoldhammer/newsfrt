@@ -1,5 +1,7 @@
 (ns newsfrt.subs
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [cljs-time.format  :refer [formatter unparse]]
+            ))
 
 (rf/reg-sub
  ::name
@@ -73,11 +75,20 @@
  (fn [db [_ button-id]]
    (nth (get-in db [:time-button-bar :ids button-id]) 0)))
 
-(rf/reg-sub
+#_(rf/reg-sub
  :query-time
  (fn [db]
    (nth (get-in db [:time-button-bar :ids
                     @(rf/subscribe [:time-button-active-id])]) 1)))
+
+(rf/reg-sub
+ :query-time
+ (fn [db]
+   (let [active-time-button @(rf/subscribe [:time-button-active-id])]
+     (if (= :tb6 active-time-button)
+       @(rf/subscribe [:get-formatted-custom-date])
+       (nth (get-in db [:time-button-bar :ids active-time-button]) 1)))))
+
 
 (rf/reg-sub
  :time-button-active-id
@@ -104,3 +115,17 @@
  :show-custom-time-panel?
  (fn [db]
    (:show-custom-time-panel? db)))
+
+(rf/reg-sub
+ :get-custom-date
+ (fn [db [_ start-or-end]]
+   (get-in db [:custom-date start-or-end])))
+
+(rf/reg-sub
+ :get-formatted-custom-date
+ (fn [db]
+   (let [start @(rf/subscribe [:get-custom-date :start])
+         end @(rf/subscribe [:get-custom-date :end])
+         stext (unparse (formatter "YYYY-MM-dd") start)
+         etext (unparse (formatter "YYYY-MM-dd") end)]
+     (str "-s " stext " -e " etext "T23:59:59"))))
