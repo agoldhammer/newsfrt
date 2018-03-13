@@ -216,11 +216,11 @@ body {
 
 .art-header {
     /* border-left: 2px solid lightblue; */
-    background-color: black;
+    background-color: rgb(230,246,247);
     font-size: 80%;
     text-align: left;
     vertical-align: bottom;
-    color: yellow;
+    color: rgb(140,1,15);
     margin: 0px;
     border-radius: 10px;
     /* border-bottom: none; */
@@ -229,13 +229,14 @@ body {
 
 .art-content {
     /* border: 2px solid lightblue; */
+    font-style: 900;
     min-height: 80%;
     background-color: white;
     /* border-top: none; */
     border-radius: 10px;
     padding: 3px;
     margin: 0px;
-    font-size: 110%;
+    font-size: 120%;
 }
 
 .art-content:hover {

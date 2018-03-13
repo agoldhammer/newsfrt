@@ -30,6 +30,7 @@
  :got-recent
  (fn [db [_ result]]
    (when (empty? result) (rf/dispatch [:alert "Server returned nothing"]))
+   (rf/dispatch [:reset-content-scroll-pos])
    (->
     db
     (assoc :recent-loading? false)
@@ -134,3 +135,10 @@
  :set-custom-date
  (fn [db [_ start-or-end date]]
    (assoc-in db [:custom-date start-or-end] date)))
+
+(rf/reg-event-db
+ :reset-content-scroll-pos
+ (fn [db]
+   (let [content (.getElementById js/document "content1")]
+     (aset content "scrollTop" 0))
+   db))

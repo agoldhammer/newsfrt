@@ -100,10 +100,14 @@
           (mapv time-button button-ids) )))
 
 (defn cal [id]
-  [re-com/datepicker :on-change #(rf/dispatch [:set-custom-date id %])
-   :model @(rf/subscribe [:get-custom-date id])
-   :attr {:id id}
-   :show-today? true])
+  (let [label (if (= id :start) "Start Date" "End Date")]
+    [re-com/v-box
+     :children [[re-com/label :label label]
+                [re-com/datepicker :on-change #(rf/dispatch
+                   [:set-custom-date id %])
+                 :model @(rf/subscribe [:get-custom-date id])
+                 :attr {:id id}
+                 :show-today? true]]]))
 
 (defn custom-calendar []
   #_(rf/dispatch [:set-custom-date :start (now)])
@@ -172,7 +176,7 @@
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
-   (into [:content.content] (mapv make-article @(rf/subscribe
+   (into [:content.content {:id "content1"}] (mapv make-article @(rf/subscribe
                                                  [:get-recent])))
    (let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
      [:aside.side (if show-cal
