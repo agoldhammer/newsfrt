@@ -165,7 +165,7 @@
 
 (defn head-panel []
   (let [abox (alert-box)]
-    [:header.main-head [:span "Noozewire Latest News  "
+    [:header.main-head [:p "Noozewire Latest News  "
                         [:i.fab.fa-500px {:style {:margin "5px"}}]
                         (itemcount)]
      (when abox abox)

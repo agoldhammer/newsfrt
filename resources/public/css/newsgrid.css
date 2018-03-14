@@ -46,8 +46,12 @@
     font-size: 80%;
 }
 
-.cat-btn:hover, .topic-btn:hover, .recent-btn:hover {
+.cat-btn:hover, .topic-btn:hover {
     background-color: yellow;
+}
+
+.recent-btn:hover {
+    background-color: red;
 }
 
 .time-btn {
@@ -112,10 +116,10 @@ body {
     background-color: lightgray;
 }
 
-.header {
-    height: 10vh;
-    background-color: lightyellow;
-}
+/* .header { */
+/*     height: 10vh; */
+/*     background-color: lightyellow; */
+/* } */
 
 /* @media (min-width: 700px) { */
 /*     .content { */
@@ -128,7 +132,7 @@ body {
 /* } */
 
 .content {
-    height: 70vh;
+    height: 75vh;
     margin: 0px;
     padding: 0px;
     overflow: auto;
@@ -151,13 +155,13 @@ body {
 .main-head {
     display: flex;
     flex-direction: column;
-    height: 25vh;
+    height: 20vh;
     padding: 5px;
     color: white;
     background-color: teal;
 }
 
-.main-head span {
+.main-head p, span {
     padding-left: 20px;
 }
 
