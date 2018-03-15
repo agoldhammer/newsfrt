@@ -155,7 +155,7 @@ body {
 .main-head {
     display: flex;
     flex-direction: column;
-    height: 20vh;
+    height: 110px;
     padding: 5px;
     color: white;
     background-color: teal;
@@ -193,7 +193,7 @@ body {
 }
 
 .main-nav {
-    height: 70vh;
+    height: 75vh;
     overflow: auto;
     background-color: lightcyan;
 }

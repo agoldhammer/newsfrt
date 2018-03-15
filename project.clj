@@ -3,6 +3,7 @@
                  [org.clojure/clojurescript "1.9.908"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
+                 [day8.re-frame/test "0.1.5"]
                  [com.andrewmcveigh/cljs-time "0.5.0"]
                  [org.clojure/core.async "0.2.391"]
                  [re-com "2.1.0"]
@@ -14,6 +15,16 @@
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj"]
+
+  :doo {:paths {:phantom "phantomjs --web-security=false"
+                :karma "karma --port=9881 --no-colors"}
+        :karma {:launchers {:chrome-no-security {:plugin "karma-chrome-launcher"
+                                                 :name "Chrome_no_security"}}
+                :config {"customLaunchers"
+                         {"Chrome_no_security" {"base" "Chrome"
+                                                "flags" ["--disable-web-security"
+                                                         "--user-data-dir"
+                                                         "--allow-access-from-files"]}}}}}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
