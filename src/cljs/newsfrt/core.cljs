@@ -13,11 +13,11 @@
 
 (defn mount-root []
   (rf/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
+  (reagent/render [views/setup-main-panel]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
   (rf/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (mount-root)
-  (rf/dispatch [:initialize-content]))
+  #_(rf/dispatch [:initialize-content]))

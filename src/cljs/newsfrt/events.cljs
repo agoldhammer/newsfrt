@@ -14,7 +14,7 @@
 (rf/reg-event-db
  :ajax-error
  (fn [db [_ details]]
-   (rf/dispatch [:alert details])
+   (rf/dispatch [:alert (:status-text details)])
    (.log js/console details)
    db))
 

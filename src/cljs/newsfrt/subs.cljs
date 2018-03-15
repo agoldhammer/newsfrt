@@ -19,6 +19,11 @@
    (:cats-loading? db)))
 
 (rf/reg-sub
+ :recent-loading?
+ (fn [db]
+   (:recent-loading? db)))
+
+(rf/reg-sub
  :categories
  (fn [db]
    (keys (get-in db [:navdata :cats]))))

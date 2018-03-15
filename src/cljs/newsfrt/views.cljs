@@ -40,13 +40,7 @@
 (defn itemcount
   "displays count of topic items in database"
   []
-  (let [icount @(rf/subscribe [:item-count])
-        loading? @(rf/subscribe [:cats-loading?])]
-    (if loading?
-      [re-com/throbber
-       :color "yellow"
-         :size :regular]
-      [:span (str "  Items in database: " icount)])))
+  [:span (str "  Items in database: " @(rf/subscribe [:item-count]))])
 
 (declare urlize)
 
@@ -153,38 +147,57 @@
               ]])
 
 (defn alert-box []
-  (let [msg @(rf/subscribe [:alert?])]
-    (if msg
-      (re-com/alert-box :id "alert-box"
-                        :heading (str "Info: " msg)
-                        :alert-type :warning
-                        :class "alert-box"
-                        :closeable? true
-                        :on-close (fn [id](rf/dispatch [:alert nil])))
-      nil)))
+  (if-let [msg @(rf/subscribe [:alert?])]
+    (re-com/alert-box :id "alert-box"
+                      :heading (str "Info: " msg)
+                      :alert-type :warning
+                      :class "alert-box"
+                      :closeable? true
+                      :on-close (fn [id](rf/dispatch [:alert nil])))
+    ))
 
 (defn head-panel []
-  (let [abox (alert-box)]
-    [:header.main-head [:p "Noozewire Latest News  "
-                        [:i.fab.fa-500px {:style {:margin "5px"}}]
-                        (itemcount)]
-     (when abox abox)
-     (time-buttons)
-     (custom-query)]))
+  [:header.main-head [:p "Noozewire Latest News  "
+                      [:i.fab.fa-500px {:style {:margin "5px"}}]
+                      (itemcount)]
+   (time-buttons)
+   (custom-query)])
 
+(defn throbber [color]
+  [re-com/throbber :color color :size :regular])
+
+(defn fill-content [what]
+  (into [:content.content {:id "content1"}] what ))
+
+(defn content []
+  (let [abox (alert-box)
+        thrbr @(rf/subscribe [:cats-loading?])
+        recent-loading? @(rf/subscribe [:recent-loading?])]
+    (cond
+      abox (fill-content [abox])
+      thrbr (fill-content [(throbber "yelow")])
+      recent-loading? (fill-content [(throbber "red")])
+      :else (fill-content (mapv make-article @(rf/subscribe
+                                                    [:get-recent]))))))
 (defn main-panel []
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
-   (into [:content.content {:id "content1"}] (mapv make-article @(rf/subscribe
-                                                 [:get-recent])))
+   (content)
    (let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
      [:aside.side (if show-cal
                     (custom-calendar)
-                    [:p "mysidetext--" [:a {:href "http://google.com" :target "_blank"} "goog"]])])
+                    [:p "mysidetext--"
+                     [:a {:href "http://google.com" :target "_blank"} "goog"]])])
    [:div.ad "ad-text"]
    [:footer.main-footer "News brought to you by Noozewire"]])
 
+
+;; see https://github.com/reagent-project/reagent
+(def setup-main-panel
+  (with-meta main-panel
+    {:component-did-mount (fn [] (do (.log js/console "main mount")
+                                     (rf/dispatch [:initialize-content])))}))
 ;; functions below are used in building articles
 ;; need to turn urls into links and eliminate from text
 
