@@ -60,6 +60,11 @@
   (take n (repeat (:dummy-list db))))
 
 (rf/reg-sub
+ :get-authors
+ (fn [db]
+   (distinct (map :author @(rf/subscribe [:get-recent])))))
+
+(rf/reg-sub
  :get-fake-status-list
  (fn [db [_ n]]
    (fake-status-list n db)))
@@ -134,3 +139,8 @@
          stext (unparse (formatter "YYYY-MM-dd") start)
          etext (unparse (formatter "YYYY-MM-dd") end)]
      (str "-s " stext " -e " etext "T23:59:59"))))
+
+(rf/reg-sub
+ :default-set?
+ (fn [db]
+   (:default-set db)))

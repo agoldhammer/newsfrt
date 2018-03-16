@@ -147,9 +147,10 @@
               ]])
 
 (defn alert-box []
-  (if-let [msg @(rf/subscribe [:alert?])]
+  (when-let [msg @(rf/subscribe [:alert?])]
+    (js/setTimeout #(rf/dispatch [:alert nil]) 5000)
     (re-com/alert-box :id "alert-box"
-                      :heading (str "Info: " msg)
+                      :heading (str "Error: " msg)
                       :alert-type :warning
                       :class "alert-box"
                       :closeable? true
@@ -175,7 +176,7 @@
         recent-loading? @(rf/subscribe [:recent-loading?])]
     (cond
       abox (fill-content [abox])
-      thrbr (fill-content [(throbber "yelow")])
+      thrbr (fill-content [(throbber "yellow")])
       recent-loading? (fill-content [(throbber "red")])
       :else (fill-content (mapv make-article @(rf/subscribe
                                                     [:get-recent]))))))
@@ -196,8 +197,8 @@
 ;; see https://github.com/reagent-project/reagent
 (def setup-main-panel
   (with-meta main-panel
-    {:component-did-mount (fn [] (do (.log js/console "main mount")
-                                     (rf/dispatch [:initialize-content])))}))
+    {:component-will-mount (fn [] (do (.log js/console "main will mount")
+                                     (rf/dispatch-sync [:initialize-content])))}))
 ;; functions below are used in building articles
 ;; need to turn urls into links and eliminate from text
 

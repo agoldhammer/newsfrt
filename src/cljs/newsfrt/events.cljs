@@ -21,6 +21,8 @@
 (rf/reg-event-db
  :got-cats
  (fn [db [_ result]]
+   (when (not @(rf/subscribe [:default-set?]))
+     (rf/dispatch [:alert "Uh-oh: no default db!"]))
    (->
     db
     (assoc :cats-loading? false)
@@ -42,7 +44,7 @@
    {:db (assoc db :cats-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/cats"
-                 :timeout 6000
+                 :timeout 10000
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-cats]
@@ -54,7 +56,7 @@
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/recent"
-                 :timeout 6000
+                 :timeout 10000
                  :format (ajax/url-request-format :java)
                  :response-format
                  (ajax/json-response-format {:keywords? true})

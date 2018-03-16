@@ -243,9 +243,9 @@ body {
     font-size: 120%;
 }
 
-.art-content:hover {
-    border: 1px solid red;
-}
+/* .art-content:hover { */
+/*     border: 1px solid red; */
+/* } */
 
 .art-content a {
     color: red;

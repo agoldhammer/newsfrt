@@ -3,6 +3,7 @@
 
 (def default-db
   {:name "re-frame"
+   :default-set true
    :show-custom-time-panel? false
    :cats-loading? false
    :dummy-list {:source "TweetDeck"
