@@ -105,10 +105,12 @@
      (rf/dispatch [:get-query (string/join " " [time-part text-part])]))
    db))
 
+;; must quote query text to accommodate multiple search terms
 (rf/reg-event-db
  :custom-query-req
  (fn [db [_ text]]
-   (let [time-part @(rf/subscribe [:query-time])]
+   (let [time-part @(rf/subscribe [:query-time])
+         quoted-text (str "\"" text "\"")]
      (rf/dispatch [:get-query (string/join " " [time-part text])]))
    db))
 
