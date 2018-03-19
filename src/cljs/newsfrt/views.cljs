@@ -40,7 +40,7 @@
 (defn itemcount
   "displays count of topic items in database"
   []
-  [:span (str "  Items in database: " @(rf/subscribe [:item-count]))])
+  [:span (str "  Items in database:  " @(rf/subscribe [:item-count]))])
 
 (declare urlize)
 
@@ -117,7 +117,7 @@
 
 (defn verify-custom-query []
   (let [text  @(rf/subscribe [:get-custom-query])]
-    (if (re-find #"[\*\.,;\-]" text)
+    (if (re-find #"[\*\.,;\-\"]" text)
       (rf/dispatch [:set-custom-query-status :error])
       (rf/dispatch [:set-custom-query-status :success]))))
 
@@ -130,6 +130,8 @@
    :gap "5px"
    :children [
               [:span "Custom Query: "]
+              [re-com/info-button :info "Type custom search terms separated by spaces"
+               :position :right-center]
               [re-com/input-text
                :model @(rf/subscribe [:get-custom-query])
                :placeholder "Type custom query text here"
@@ -137,7 +139,7 @@
                :change-on-blur? false
                :status @(rf/subscribe [:get-custom-query-status])
                :status-icon? true
-               :status-tooltip "Characters * - , ; . not allowed"
+               :status-tooltip "Characters * - , ; . \" not allowed"
                :attr {:on-key-press #(when (= (.-key %1) "Enter")
                                        #_(println "Enter")
                                        (rf/dispatch [:custom-query-req
@@ -157,10 +159,17 @@
                       :on-close (fn [id](rf/dispatch [:alert nil])))
     ))
 
+(defn help-text []
+  (re-com/v-box :children [[:p "After selecting time, you may either:"]
+                           [:p "Select categories or topics from left colum"]
+                           [:p "Enter a custom query"]
+                           [:p "Default shows last 3 hrs of news, all cat"]]))
 (defn head-panel []
-  [:header.main-head [:p "Noozewire Latest News  "
-                      [:i.fab.fa-500px {:style {:margin "5px"}}]
-                      (itemcount)]
+  [:header.main-head [re-com/h-box :gap "5px"
+                      :children [[re-com/label :label "Noozewire Latest News"]
+                                 [re-com/info-button :info (help-text)
+                                  :position :right-center]
+                                 (itemcount)]]
    (time-buttons)
    (custom-query)])
 
@@ -172,23 +181,38 @@
 
 (defn content []
   (let [abox (alert-box)
+        cal @(rf/subscribe [:show-custom-time-panel?])
         thrbr @(rf/subscribe [:cats-loading?])
         recent-loading? @(rf/subscribe [:recent-loading?])]
     (cond
+      cal (custom-calendar)
       abox (fill-content [abox])
       thrbr (fill-content [(throbber "yellow")])
       recent-loading? (fill-content [(throbber "red")])
       :else (fill-content (mapv make-article @(rf/subscribe
-                                                    [:get-recent]))))))
+                                                    [:filtered-statuses]))))))
+(defn chkbox [author]
+  (re-com/checkbox :label author
+                   :model @(rf/subscribe [:get-author-display-state author])
+                   :on-change #(rf/dispatch
+                     [:toggle-author-display-state author %])))
+
+(defn author-panel []
+  (let [authors @(rf/subscribe [:get-authors])]
+    (mapv chkbox authors))
+  )
+
 (defn main-panel []
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
    (content)
-   (let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
-     [:aside.side (if show-cal
+   (into [:aside.side] (author-panel))
+   #_(let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
+     [:aside.side [:p "text"]#_(if show-cal
                     (custom-calendar)
-                    [:p "mysidetext--"
+                    (side-panel)
+                    #_[:p "mysidetext--"
                      [:a {:href "http://google.com" :target "_blank"} "goog"]])])
    [:div.ad "ad-text"]
    [:footer.main-footer "News brought to you by Noozewire"]])

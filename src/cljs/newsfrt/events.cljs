@@ -28,6 +28,19 @@
     (assoc :cats-loading? false)
     (assoc :navdata result))))
 
+;; auxiliary function to set up author-display-state section of db
+(defn set-author-display-states
+  "Given a seq of statuses, return map {auth: true} with key for each author"
+  [statuses]
+  (let [authors (distinct (map
+                           (comp string/upper-case :author) statuses))]
+    (zipmap authors (repeat true))))
+
+(rf/reg-event-db
+ :toggle-author-display-state
+ (fn [db [_ author state]]
+   (assoc-in db [:author-display-states author] state)))
+
 (rf/reg-event-db
  :got-recent
  (fn [db [_ result]]
@@ -35,6 +48,7 @@
    (rf/dispatch [:reset-content-scroll-pos])
    (->
     db
+    (assoc :author-display-states (set-author-display-states result))
     (assoc :recent-loading? false)
     (assoc :recent result)) ))
 
