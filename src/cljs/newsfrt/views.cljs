@@ -201,7 +201,7 @@
 (defn author-panel []
   (let [authors @(rf/subscribe [:get-authors])]
     (re-com/v-box :children (into [[re-com/checkbox :label "All/None"
-                                    :model true
+                                    :model @(rf/subscribe [:display-all-authors?])
                                     :on-change #(rf/dispatch
                                          [:set-reset-author-display-states %])]
                                    [re-com/line]]

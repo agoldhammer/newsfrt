@@ -104,6 +104,11 @@
      (filterv #(status-author-active? %1 active-authors) statuses))))
 
 (rf/reg-sub
+ :display-all-authors?
+ (fn [db]
+   (:display-all-authors? db)))
+
+(rf/reg-sub
  :get-time-button-ids
  (fn [db]
    (keys (get-in db [:time-button-bar :ids]))))
