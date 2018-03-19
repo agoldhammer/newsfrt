@@ -42,6 +42,13 @@
    (assoc-in db [:author-display-states author] state)))
 
 (rf/reg-event-db
+ :set-reset-author-display-states
+ (fn [db [_ true-or-false]]
+   (let [authors (keys (:author-display-states db))]
+     (assoc db :author-display-states
+            (zipmap authors (repeat true-or-false))))))
+
+(rf/reg-event-db
  :got-recent
  (fn [db [_ result]]
    (when (empty? result) (rf/dispatch [:alert "Server returned nothing"]))

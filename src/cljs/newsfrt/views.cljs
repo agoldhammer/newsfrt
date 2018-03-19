@@ -32,6 +32,7 @@
 ;; ----art-content
 ;;
 ;; --aside.side
+;; ---filter checkboxes
 ;; --div.ad
 ;; --footer.main-footer
 ;;
@@ -199,7 +200,12 @@
 
 (defn author-panel []
   (let [authors @(rf/subscribe [:get-authors])]
-    (mapv chkbox authors))
+    (re-com/v-box :children (into [[re-com/checkbox :label "All/None"
+                                    :model true
+                                    :on-change #(rf/dispatch
+                                         [:set-reset-author-display-states %])]
+                                   [re-com/line]]
+                                  (mapv chkbox authors))))
   )
 
 (defn main-panel []
@@ -207,7 +213,7 @@
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
    (content)
-   (into [:aside.side] (author-panel))
+   [:aside.side (author-panel)]
    #_(let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
      [:aside.side [:p "text"]#_(if show-cal
                     (custom-calendar)
