@@ -145,11 +145,17 @@ body {
 }
 
 .ad {
+    height: 30vh;
+    overflow: auto;
     background-color: papayawhip;
 }
 
 .side {
-    background-color: burlywood;
+    height: 45vh;
+    padding: 4px;
+    overflow: auto;
+    color: white;
+    background-color: brown;
 }
 
 .main-head {
@@ -241,10 +247,6 @@ body {
     padding: 3px;
     margin: 0px;
     font-size: 120%;
-}
-
-.art-content:hover {
-    border: 1px solid red;
 }
 
 .art-content a {

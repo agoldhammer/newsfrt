@@ -1,5 +1,6 @@
 (ns newsfrt.subs
   (:require [re-frame.core :as rf]
+            [clojure.string :as string]
             [cljs-time.format  :refer [formatter unparse]]
             ))
 
@@ -60,15 +61,47 @@
   (take n (repeat (:dummy-list db))))
 
 (rf/reg-sub
+ :get-authors
+ (fn [db]
+   (sort (keys @(rf/subscribe [:get-author-display-states])))))
+
+(rf/reg-sub
+ :get-author-display-states
+ (fn [db]
+   (:author-display-states db)))
+
+(rf/reg-sub
+ :get-author-display-state
+ (fn [db [_ author]]
+   (get-in db [:author-display-states author])))
+
+(rf/reg-sub
  :get-fake-status-list
  (fn [db [_ n]]
    (fake-status-list n db)))
 ;;;;;;;
 
 (rf/reg-sub
+ :get-active-authors
+ (fn [db]
+   (into #{}
+         (map first (filter second (:author-display-states db))))))
+
+(rf/reg-sub
  :get-recent
  (fn [db]
    (:recent db)))
+
+(defn status-author-active?
+  [status active-authors]
+  (some #{(string/upper-case(:author status))} active-authors))
+
+(rf/reg-sub
+ :filtered-statuses
+ (fn [db]
+   (let [active-authors @(rf/subscribe [:get-active-authors])
+         statuses (:recent db)]
+     (filterv #(status-author-active? %1 active-authors) statuses))))
 
 (rf/reg-sub
  :get-time-button-ids
@@ -79,12 +112,6 @@
  :button-id-to-text
  (fn [db [_ button-id]]
    (nth (get-in db [:time-button-bar :ids button-id]) 0)))
-
-#_(rf/reg-sub
- :query-time
- (fn [db]
-   (nth (get-in db [:time-button-bar :ids
-                    @(rf/subscribe [:time-button-active-id])]) 1)))
 
 (rf/reg-sub
  :query-time
@@ -134,3 +161,8 @@
          stext (unparse (formatter "YYYY-MM-dd") start)
          etext (unparse (formatter "YYYY-MM-dd") end)]
      (str "-s " stext " -e " etext "T23:59:59"))))
+
+(rf/reg-sub
+ :default-set?
+ (fn [db]
+   (:default-set db)))

@@ -21,10 +21,32 @@
 (rf/reg-event-db
  :got-cats
  (fn [db [_ result]]
+   (when (not @(rf/subscribe [:default-set?]))
+     (rf/dispatch [:alert "Uh-oh: no default db!"]))
    (->
     db
     (assoc :cats-loading? false)
     (assoc :navdata result))))
+
+;; auxiliary function to set up author-display-state section of db
+(defn set-author-display-states
+  "Given a seq of statuses, return map {auth: true} with key for each author"
+  [statuses]
+  (let [authors (distinct (map
+                           (comp string/upper-case :author) statuses))]
+    (zipmap authors (repeat true))))
+
+(rf/reg-event-db
+ :toggle-author-display-state
+ (fn [db [_ author state]]
+   (assoc-in db [:author-display-states author] state)))
+
+(rf/reg-event-db
+ :set-reset-author-display-states
+ (fn [db [_ true-or-false]]
+   (let [authors (keys (:author-display-states db))]
+     (assoc db :author-display-states
+            (zipmap authors (repeat true-or-false))))))
 
 (rf/reg-event-db
  :got-recent
@@ -33,6 +55,7 @@
    (rf/dispatch [:reset-content-scroll-pos])
    (->
     db
+    (assoc :author-display-states (set-author-display-states result))
     (assoc :recent-loading? false)
     (assoc :recent result)) ))
 
@@ -42,7 +65,7 @@
    {:db (assoc db :cats-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/cats"
-                 :timeout 6000
+                 :timeout 10000
                  :response-format
                  (ajax/json-response-format {:keywords? true})
                  :on-success [:got-cats]
@@ -54,7 +77,7 @@
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
                  :uri "http://localhost:5000/json/recent"
-                 :timeout 6000
+                 :timeout 10000
                  :format (ajax/url-request-format :java)
                  :response-format
                  (ajax/json-response-format {:keywords? true})
@@ -103,10 +126,12 @@
      (rf/dispatch [:get-query (string/join " " [time-part text-part])]))
    db))
 
+;; must quote query text to accommodate multiple search terms
 (rf/reg-event-db
  :custom-query-req
  (fn [db [_ text]]
-   (let [time-part @(rf/subscribe [:query-time])]
+   (let [time-part @(rf/subscribe [:query-time])
+         quoted-text (str "\"" text "\"")]
      (rf/dispatch [:get-query (string/join " " [time-part text])]))
    db))
 
