@@ -32,7 +32,7 @@
 ;; ----art-content
 ;;
 ;; --aside.side
-;; ---filter checkboxes
+;; ---author panel
 ;; --div.ad
 ;; --footer.main-footer
 ;;
@@ -214,12 +214,6 @@
    (into [:nav.main-nav] (category-buttons))
    (content)
    [:aside.side (author-panel)]
-   #_(let [show-cal @(rf/subscribe [:show-custom-time-panel?])]
-     [:aside.side [:p "text"]#_(if show-cal
-                    (custom-calendar)
-                    (side-panel)
-                    #_[:p "mysidetext--"
-                     [:a {:href "http://google.com" :target "_blank"} "goog"]])])
    [:div.ad "ad-text"]
    [:footer.main-footer "News brought to you by Noozewire"]])
 

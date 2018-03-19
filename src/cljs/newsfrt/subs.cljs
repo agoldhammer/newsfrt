@@ -126,7 +126,6 @@
        @(rf/subscribe [:get-formatted-custom-date])
        (nth (get-in db [:time-button-bar :ids active-time-button]) 1)))))
 
-
 (rf/reg-sub
  :time-button-active-id
  (fn [db]
