@@ -38,10 +38,16 @@
 ;;
 
 ;; header item
+
+(defn now-as-string
+  []
+  (cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now)))
+
 (defn itemcount
   "displays count of topic items in database"
   []
-  [:span (str "  Items in database:  " @(rf/subscribe [:item-count]))])
+  [:span (str "  Items in database:  " @(rf/subscribe [:item-count])
+              " at " (now-as-string))])
 
 (declare urlize)
 
@@ -247,3 +253,15 @@
     (into [:p.art-content modtext] (mapv link-url urls))))
 
 ;; --- end of urlize-related funcs ----------
+
+(comment
+  ; get current date time
+ (cljs-time.coerce/from-long (.getTime (js/Date.)))
+;; >> #object[Object 20181104T150835]
+
+(now) does same thing
+
+(cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now))
+"11-04-2018-15:38:22"
+
+  )

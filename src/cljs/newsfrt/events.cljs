@@ -73,7 +73,7 @@
  (fn [{:keys [db]} _]
    {:db (assoc db :cats-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://localhost:5000/json/cats"
+                 :uri "http://swann.local/json/cats"
                  :timeout 10000
                  :response-format
                  (ajax/json-response-format {:keywords? true})
@@ -85,7 +85,7 @@
  (fn [{:keys [db]} _]
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://localhost:5000/json/recent"
+                 :uri "http://swann.local/json/recent"
                  :timeout 10000
                  :format (ajax/url-request-format :java)
                  :response-format
@@ -98,7 +98,7 @@
  (fn [{:keys [db]} [_ query]]
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://localhost:5000/json/qry"
+                 :uri "http://swann.local/json/qry"
                  :timeout 6000
                  :format (ajax/url-request-format :java)
                  :params {:data query}
