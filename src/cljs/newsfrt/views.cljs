@@ -215,6 +215,8 @@
   )
 
 (defn main-panel []
+  ;; set timer to update count every 10 mins
+  (js/setInterval #(rf/dispatch [:get-cats]) 600000)
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))

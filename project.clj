@@ -65,7 +65,9 @@
     {:id           "min"
      :source-paths ["src/cljs"]
      :compiler     {:main            newsfrt.core
-                    :output-to       "resources/public/js/compiled/app.js"
+                    :output-to       "resources/public/js/compiled/app2.js"
+                    :output-dir           "resources/public/js/compiled/out2"
+                    :asset-path           "js/compiled/out2"
                     :optimizations   :advanced
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false}}

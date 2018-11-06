@@ -1,10 +1,14 @@
 (ns newsfrt.events
   (:require [re-frame.core :as rf]
             [newsfrt.db :as db]
+            [newsfrt.config :as config]
             [clojure.string :as string]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]))
 
+(defonce server (if config/debug?
+                  "http://swann.local"
+                  ""))
 
 (rf/reg-event-db
  :alert
@@ -27,6 +31,16 @@
     db
     (assoc :cats-loading? false)
     (assoc :navdata result))))
+
+
+(rf/reg-event-db
+ :got-count
+ (fn [db [_ result]]
+   (when (not @(rf/subscribe [:default-set?]))
+     (rf/dispatch [:alert "Uh-oh: no default db!"]))
+   (->
+    db
+    (assoc-in [:navdata] result))))
 
 ;; auxiliary function to set up author-display-state section of db
 (defn set-author-display-states
@@ -73,7 +87,7 @@
  (fn [{:keys [db]} _]
    {:db (assoc db :cats-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://swann.local/json/cats"
+                 :uri (str server "/json/cats")
                  :timeout 10000
                  :response-format
                  (ajax/json-response-format {:keywords? true})
@@ -81,11 +95,24 @@
                  :on-failure [:ajax-error]}}))
 
 (rf/reg-event-fx
+ :get-count
+ (fn [{:keys [db]} _]
+   {:db (assoc db :cats-loading? true)
+    :http-xhrio {:method :get
+                 :uri (str server "/json/count")
+                 :timeout 10000
+                 :response-format
+                 (ajax/json-response-format {:keywords? true})
+                 :on-success [:got-count]
+                 :on-failure [:ajax-error]}}))
+
+
+(rf/reg-event-fx
  :get-recent
  (fn [{:keys [db]} _]
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://swann.local/json/recent"
+                 :uri (str server "/json/recent")
                  :timeout 10000
                  :format (ajax/url-request-format :java)
                  :response-format
@@ -98,7 +125,7 @@
  (fn [{:keys [db]} [_ query]]
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
-                 :uri "http://swann.local/json/qry"
+                 :uri (str server "/json/qry")
                  :timeout 6000
                  :format (ajax/url-request-format :java)
                  :params {:data query}
