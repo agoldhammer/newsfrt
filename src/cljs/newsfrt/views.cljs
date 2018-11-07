@@ -216,7 +216,6 @@
 
 (defn main-panel []
   ;; set timer to update count every 10 mins
-  (js/setInterval #(rf/dispatch [:get-cats]) 600000)
   [:div.wrapper
    (head-panel)
    (into [:nav.main-nav] (category-buttons))
@@ -230,7 +229,9 @@
 (def setup-main-panel
   (with-meta main-panel
     {:component-will-mount (fn [] (do (.log js/console "main will mount")
-                                     (rf/dispatch-sync [:initialize-content])))}))
+                                      (rf/dispatch-sync
+                                       [:initialize-content])))}))
+
 ;; functions below are used in building articles
 ;; need to turn urls into links and eliminate from text
 
@@ -265,5 +266,5 @@
 
 (cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now))
 "11-04-2018-15:38:22"
-
+(js/setInterval #(rf/dispatch [:get-cats]) 600000)
   )

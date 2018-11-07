@@ -36,11 +36,10 @@
 (rf/reg-event-db
  :got-count
  (fn [db [_ result]]
-   (when (not @(rf/subscribe [:default-set?]))
-     (rf/dispatch [:alert "Uh-oh: no default db!"]))
    (->
     db
-    (assoc-in [:navdata] result))))
+    (assoc :cats-loading? false)
+    (assoc-in [:navdata :count] (:count result)))))
 
 ;; auxiliary function to set up author-display-state section of db
 (defn set-author-display-states
@@ -142,6 +141,8 @@
 (rf/reg-event-db
  :initialize-content
  (fn [db _]
+   ;; set timer to refresh stats every 10 mins
+   (js/setInterval #(rf/dispatch [:get-count]) 600000)
    (rf/dispatch [:get-cats])
    (rf/dispatch [:get-recent])
    db))
