@@ -1,0 +1,14 @@
+db
+{:navdata {:count int
+           :cats {:cat
+                  :desc
+                  :topics }[{:topic
+                             :desc
+                             :query}]}
+  :statuses [{:text text
+              :created_at dt
+              :source source
+              :author author}]
+  
+  :flags ...??}
+

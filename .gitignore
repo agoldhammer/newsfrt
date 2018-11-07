@@ -10,3 +10,4 @@ project.clj.old
 resources/.DS_Store
 resources/public/index.html.normal
 resources/public/index2.html
+.lein-failures
