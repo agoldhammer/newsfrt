@@ -12,7 +12,12 @@
 (rf/reg-sub
  :item-count
  (fn [db]
-   (get-in db [:navdata :count])))
+   (:count db)))
+
+(rf/reg-sub
+ :get-time-of-count
+ (fn [db]
+   (:time-of-count db)))
 
 (rf/reg-sub
  :cats-loading?

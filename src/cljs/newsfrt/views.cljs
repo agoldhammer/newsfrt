@@ -37,17 +37,11 @@
 ;; --footer.main-footer
 ;;
 
-;; header item
-
-(defn now-as-string
-  []
-  (cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now)))
-
 (defn itemcount
   "displays count of topic items in database"
   []
   [:span (str "  Items in database:  " @(rf/subscribe [:item-count])
-              " at " (now-as-string))])
+              " at " @(rf/subscribe [:get-time-of-count]))])
 
 (declare urlize)
 

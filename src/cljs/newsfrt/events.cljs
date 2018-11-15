@@ -1,5 +1,8 @@
 (ns newsfrt.events
   (:require [re-frame.core :as rf]
+            [cljs-time.core :refer [now]]
+            [cljs-time.coerce  :refer [to-local-date]]
+            [cljs-time.format  :refer [formatter unparse]]
             [newsfrt.db :as db]
             [newsfrt.config :as config]
             [clojure.string :as string]
@@ -9,6 +12,10 @@
 (defonce server (if config/debug?
                   "http://swann.local"
                   ""))
+
+(defn now-as-string
+  []
+  (cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now)))
 
 (rf/reg-event-db
  :alert
@@ -38,8 +45,9 @@
  (fn [db [_ result]]
    (->
     db
+    (assoc :time-of-count (now-as-string))
     (assoc :cats-loading? false)
-    (assoc-in [:navdata :count] (:count result)))))
+    (assoc :count (:count result)))))
 
 ;; auxiliary function to set up author-display-state section of db
 (defn set-author-display-states
@@ -143,6 +151,7 @@
  (fn [db _]
    ;; set timer to refresh stats every 10 mins
    (js/setInterval #(rf/dispatch [:get-count]) 600000)
+   (rf/dispatch [:get-count])
    (rf/dispatch [:get-cats])
    (rf/dispatch [:get-recent])
    db))
