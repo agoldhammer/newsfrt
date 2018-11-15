@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [re-com.core :as re-com]
             [clojure.string :as string]
+            [newsfrt.subs :as subs]
             [goog.string :as gstring]
             ))
 
