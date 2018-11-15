@@ -1,10 +1,6 @@
 (ns newsfrt.views
   (:require [re-frame.core :as rf]
             [re-com.core :as re-com]
-            [cljs-time.core :refer [now]]
-            [cljs-time.coerce  :refer [to-local-date]]
-            [cljs-time.format  :refer [formatter unparse]]
-            [newsfrt.subs :as subs]
             [clojure.string :as string]
             [goog.string :as gstring]
             ))

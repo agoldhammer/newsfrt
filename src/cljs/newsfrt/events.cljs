@@ -1,7 +1,6 @@
 (ns newsfrt.events
   (:require [re-frame.core :as rf]
             [cljs-time.core :refer [now]]
-            [cljs-time.coerce  :refer [to-local-date]]
             [cljs-time.format  :refer [formatter unparse]]
             [newsfrt.db :as db]
             [newsfrt.config :as config]
@@ -176,8 +175,7 @@
 (rf/reg-event-db
  :custom-query-req
  (fn [db [_ text]]
-   (let [time-part @(rf/subscribe [:query-time])
-         quoted-text (str "\"" text "\"")]
+   (let [time-part @(rf/subscribe [:query-time])]
      (rf/dispatch [:get-query (string/join " " [time-part text])]))
    db))
 
