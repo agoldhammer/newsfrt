@@ -103,8 +103,7 @@
 (rf/reg-event-fx
  :get-count
  (fn [{:keys [db]} _]
-   {:db (assoc db :cats-loading? true)
-    :http-xhrio {:method :get
+   {:http-xhrio {:method :get
                  :uri (str server "/json/count")
                  :timeout 10000
                  :response-format
@@ -149,7 +148,7 @@
  :initialize-content
  (fn [db _]
    ;; set timer to refresh stats every 10 mins
-   (js/setInterval #(rf/dispatch [:get-count]) 600000)
+   (js/setInterval #(rf/dispatch [:get-count]) 60000)
    (rf/dispatch [:get-count])
    (rf/dispatch [:get-cats])
    (rf/dispatch [:get-recent])
