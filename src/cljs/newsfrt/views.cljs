@@ -123,6 +123,9 @@
   (rf/dispatch-sync [:set-custom-query  text])
   (verify-custom-query))
 
+(defn what-displayed []
+  [:span @(rf/subscribe [:get-display-text])])
+
 (defn custom-query []
   [re-com/h-box :class "custom-query"
    :gap "5px"
@@ -142,9 +145,8 @@
                                        #_(println "Enter")
                                        (rf/dispatch [:custom-query-req
                                                      @(rf/subscribe
-                                                      [:get-custom-query])])) }
-               ]
-              ]])
+                                                      [:get-custom-query])])) }]
+              (what-displayed)]])
 
 (defn alert-box []
   (when-let [msg @(rf/subscribe [:alert?])]

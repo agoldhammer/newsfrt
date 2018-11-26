@@ -60,6 +60,11 @@
  (fn [db [_ category topic]]
    (:query @(rf/subscribe [:fulltopic category topic]))))
 
+(rf/reg-sub
+ :get-display-text
+ (fn [db]
+   (:display db)))
+
 ;; this section is for testing
 (defn fake-status-list
   [n db]

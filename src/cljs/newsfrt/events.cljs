@@ -115,7 +115,9 @@
 (rf/reg-event-fx
  :get-recent
  (fn [{:keys [db]} _]
-   {:db (assoc db :recent-loading? true)
+   {:db (-> db
+            (assoc :recent-loading? true)
+            (assoc :display "Latest!"))
     :http-xhrio {:method :get
                  :uri (str server "/json/recent")
                  :timeout 10000
@@ -155,10 +157,17 @@
    db))
 
 (rf/reg-event-db
+ :set-display
+ (fn [db [_ display]]
+   (assoc db :display display)))
+
+(rf/reg-event-db
  :topic-req
  (fn [db [_ topic]]
-   (let [time-part @(rf/subscribe [:query-time])]
-     (rf/dispatch [:get-query (str time-part " *" topic)]))
+   (let [time-part @(rf/subscribe [:query-time])
+         query (str time-part " *" topic)]
+     (rf/dispatch [:set-display query])
+     (rf/dispatch [:get-query query]))
    db))
 
 (rf/reg-event-db
@@ -167,6 +176,7 @@
    (let [time-part @(rf/subscribe [:query-time])
          topics    @(rf/subscribe [:topics-by-category category])
          text-part (string/join (map #(str " *" %1) topics))]
+     (rf/dispatch [:set-display (string/join " " [time-part text-part])])
      (rf/dispatch [:get-query (string/join " " [time-part text-part])]))
    db))
 
