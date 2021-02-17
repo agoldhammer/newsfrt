@@ -2,9 +2,8 @@
   (:require [re-frame.core :as rf]
             [re-com.core :as re-com]
             [clojure.string :as string]
-            [newsfrt.subs :as subs]
-            [goog.string :as gstring]
-            ))
+            #_[newsfrt.subs :as subs]
+            [goog.string :as gstring]))
 
 ;; components
 ;; main-panel
@@ -67,7 +66,7 @@
                                   :on-click #(rf/dispatch [:category-req
                                                            category])}
                  (name category)]]
-        (mapv #(topic-button %1) topic-descs))))
+          (mapv #(topic-button %1) topic-descs))))
 
 (defn category-buttons []
   (let [categories @(rf/subscribe [:categories])]
@@ -89,14 +88,14 @@
            {:on-click #(rf/dispatch [:set-active-time-button
                                      (keyword
                                       (-> % .-target .-id))])}]
-          (mapv time-button button-ids) )))
+          (mapv time-button button-ids))))
 
 (defn cal [id]
   (let [label (if (= id :start) "Start Date" "End Date")]
     [re-com/v-box
      :children [[re-com/label :label label]
                 [re-com/datepicker :on-change #(rf/dispatch
-                   [:set-custom-date id %])
+                                                [:set-custom-date id %])
                  :model @(rf/subscribe [:get-custom-date id])
                  :attr {:id id}
                  :show-today? true]]]))
@@ -109,7 +108,7 @@
    :wrap-nicely? true
    ;; :child [:span "message"]
    :child [re-com/h-box :gap "20px"
-              :children [(cal :start) (cal :end)]]])
+           :children [(cal :start) (cal :end)]]])
 
 ;; custom query
 
@@ -129,8 +128,7 @@
 (defn custom-query []
   [re-com/h-box :class "custom-query"
    :gap "5px"
-   :children [
-              [:span "Custom Query: "]
+   :children [[:span "Custom Query: "]
               [re-com/info-button :info "Type custom search terms separated by spaces"
                :position :right-center]
               [re-com/input-text
@@ -145,7 +143,7 @@
                                        #_(println "Enter")
                                        (rf/dispatch [:custom-query-req
                                                      @(rf/subscribe
-                                                      [:get-custom-query])])) }]
+                                                       [:get-custom-query])]))}]
               (what-displayed)]])
 
 (defn alert-box []
@@ -156,8 +154,7 @@
                       :alert-type :warning
                       :class "alert-box"
                       :closeable? true
-                      :on-close (fn [id](rf/dispatch [:alert nil])))
-    ))
+                      :on-close (fn [_] (rf/dispatch [:alert nil])))))
 
 (defn help-text []
   (re-com/v-box :children [[:p "After selecting time, you may either:"]
@@ -177,7 +174,7 @@
   [re-com/throbber :color color :size :regular])
 
 (defn fill-content [what]
-  (into [:content.content {:id "content1"}] what ))
+  (into [:content.content {:id "content1"}] what))
 
 (defn content []
   (let [abox (alert-box)
@@ -190,22 +187,21 @@
       thrbr (fill-content [(throbber "yellow")])
       recent-loading? (fill-content [(throbber "red")])
       :else (fill-content (mapv make-article @(rf/subscribe
-                                                    [:filtered-statuses]))))))
+                                               [:filtered-statuses]))))))
 (defn chkbox [author]
   (re-com/checkbox :label author
                    :model @(rf/subscribe [:get-author-display-state author])
                    :on-change #(rf/dispatch
-                     [:toggle-author-display-state author %])))
+                                [:toggle-author-display-state author %])))
 
 (defn author-panel []
   (let [authors @(rf/subscribe [:get-authors])]
     (re-com/v-box :children (into [[re-com/checkbox :label "All/None"
                                     :model @(rf/subscribe [:display-all-authors?])
                                     :on-change #(rf/dispatch
-                                         [:set-reset-author-display-states %])]
+                                                 [:set-reset-author-display-states %])]
                                    [re-com/line]]
-                                  (mapv chkbox authors))))
-  )
+                                  (mapv chkbox authors)))))
 
 (defn main-panel []
   ;; set timer to update count every 10 mins
@@ -221,9 +217,9 @@
 ;; see https://github.com/reagent-project/reagent
 (def setup-main-panel
   (with-meta main-panel
-    {:component-will-mount (fn [] (do (.log js/console "main will mount")
-                                      (rf/dispatch-sync
-                                       [:initialize-content])))}))
+    {:component-will-mount (fn [] (.log js/console "main will mount")
+                             (rf/dispatch-sync
+                              [:initialize-content]))}))
 
 ;; functions below are used in building articles
 ;; need to turn urls into links and eliminate from text
@@ -250,14 +246,3 @@
 
 ;; --- end of urlize-related funcs ----------
 
-(comment
-  ; get current date time
- (cljs-time.coerce/from-long (.getTime (js/Date.)))
-;; >> #object[Object 20181104T150835]
-
-(now) does same thing
-
-(cljs-time.format/unparse (formatter "MM-DD-YYYY-HH:mm:ss") (now))
-"11-04-2018-15:38:22"
-(js/setInterval #(rf/dispatch [:get-cats]) 600000)
-  )
