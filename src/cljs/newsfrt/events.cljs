@@ -1,7 +1,7 @@
 (ns newsfrt.events
   (:require [re-frame.core :as rf]
             [cljs-time.core :refer [now]]
-            [cljs-time.format  :refer [formatter unparse]]
+            [cljs-time.format  :refer [formatter #_unparse]]
             [newsfrt.db :as db]
             [newsfrt.config :as config]
             [clojure.string :as string]
@@ -102,7 +102,7 @@
 
 (rf/reg-event-fx
  :get-count
- (fn [{:keys [db]} _]
+ (fn [_]
    {:http-xhrio {:method :get
                  :uri (str server "/json/count")
                  :timeout 10000
