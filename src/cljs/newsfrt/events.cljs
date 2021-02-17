@@ -133,7 +133,7 @@
    {:db (assoc db :recent-loading? true)
     :http-xhrio {:method :get
                  :uri (str server "/json/qry")
-                 :timeout 6000
+                 :timeout 30000
                  :format (ajax/url-request-format :java)
                  :params {:data query}
                  :response-format
