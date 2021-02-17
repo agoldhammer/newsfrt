@@ -13,4 +13,6 @@ resources/public/index2.html
 .lein-failures
 sqlite.db
 output.calva-repl
+*.code-workspace
+
 
