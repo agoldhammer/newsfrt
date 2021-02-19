@@ -8,8 +8,8 @@
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]))
 
-(defonce server (if config/debug?
-                  "http://swann.local"
+(def server (if config/debug?
+                  "http://localhost:5000"
                   ""))
 
 (defn now-as-string
