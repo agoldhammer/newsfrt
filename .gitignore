@@ -14,3 +14,7 @@ resources/public/index2.html
 sqlite.db
 output.calva-repl
 .rebel*
+.clj-kondo/
+.lsp/
+resources/public/js/compiled/**
+*.code-workspace
